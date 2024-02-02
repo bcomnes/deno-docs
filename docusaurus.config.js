@@ -21,7 +21,9 @@ const config = {
       "classic",
       {
         docs: {
-          id: "runtime",
+          // The useActiveVersion hook in orama search assumes that there is a 'default' id'd document set.
+          // If I can find a way to customize that ID, we can keep this id as 'runtime'.
+          id: "default",
           path: "runtime",
           routeBasePath: "runtime",
           sidebarPath: require.resolve("./sidebars/runtime.js"),
@@ -90,6 +92,7 @@ const config = {
         },
       };
     },
+    '@orama/plugin-docusaurus-v3'
   ],
 
   themeConfig: ({
@@ -234,44 +237,6 @@ const config = {
       theme: lightCodeTheme,
       darkTheme: darkCodeTheme,
       additionalLanguages: ["powershell", "diff"],
-    },
-    algolia: {
-      // The application ID provided by Algolia
-      appId: "KAQ4QIALEB",
-
-      // Public API key: it is safe to commit it
-      apiKey: "0795dfc12048ff344a54bb4c04c9000b",
-
-      indexName: "deno",
-
-      insights: true,
-
-      // Optional: see doc section below
-      contextualSearch: true,
-
-      // Optional: Specify domains where the navigation should occur through
-      // window.location instead on history.push. Useful when our Algolia
-      // config crawls multiple documentation sites and we want to navigate
-      // with window.location.href to them.
-      // externalUrlRegex: "external\\.com|domain\\.com",
-
-      // Optional: Replace parts of the item URLs from Algolia. Useful when
-      // using the same search index for multiple deployments using a
-      // different baseUrl. You can use regexp or string in the `from` param.
-      // For example: localhost:3000 vs myCompany.com/docs
-      /*
-        replaceSearchResultPathname: {
-          from: "/docs/", // or as RegExp: /\/docs\//
-          to: "/",
-        },
-        */
-
-      // Optional: Algolia search parameters
-      searchParameters: {},
-
-      // Optional: path for search page that enabled by default (`false`
-      // to disable it)
-      searchPagePath: "search",
     },
   }),
 };
