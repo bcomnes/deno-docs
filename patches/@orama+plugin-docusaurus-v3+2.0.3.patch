@@ -1,0 +1,33 @@
+diff --git a/node_modules/@orama/plugin-docusaurus-v3/lib/index.js b/node_modules/@orama/plugin-docusaurus-v3/lib/index.js
+index 59b5c59..02b773b 100644
+--- a/node_modules/@orama/plugin-docusaurus-v3/lib/index.js
++++ b/node_modules/@orama/plugin-docusaurus-v3/lib/index.js
+@@ -28,9 +28,8 @@ function OramaPluginDocusaurus(ctx) {
+             return ['../lib/theme/SearchBar/index.css'];
+         },
+         async contentLoaded({ actions, allContent }) {
+-            var _a, _b;
+             const isDevelopment = process.env.NODE_ENV === 'development';
+-            const loadedVersions = (_b = (_a = allContent['docusaurus-plugin-content-docs']) === null || _a === void 0 ? void 0 : _a.default) === null || _b === void 0 ? void 0 : _b.loadedVersions;
++            const loadedVersions = Object.values(allContent['docusaurus-plugin-content-docs']).flatMap(entry => entry === null || entry === void 0 ? void 0 : entry.loadedVersions);
+             versions = loadedVersions.map((v) => v.versionName);
+             await Promise.all(versions.map((version) => buildDevSearchData(ctx.siteDir, ctx.generatedFilesDir, allContent, version)));
+             if (isDevelopment) {
+@@ -53,11 +52,12 @@ function OramaPluginDocusaurus(ctx) {
+ }
+ exports.default = OramaPluginDocusaurus;
+ async function buildDevSearchData(siteDir, generatedFilesDir, allContent, version) {
+-    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k;
+-    const loadedVersion = (_c = (_b = (_a = allContent['docusaurus-plugin-content-docs']) === null || _a === void 0 ? void 0 : _a.default) === null || _b === void 0 ? void 0 : _b.loadedVersions) === null || _c === void 0 ? void 0 : _c.find((v) => v.versionName === version);
+-    const blogs = (_g = (_f = (_e = (_d = allContent['docusaurus-plugin-content-blog']) === null || _d === void 0 ? void 0 : _d.default) === null || _e === void 0 ? void 0 : _e.blogPosts) === null || _f === void 0 ? void 0 : _f.map(({ metadata }) => metadata)) !== null && _g !== void 0 ? _g : [];
+-    const pages = (_j = (_h = allContent['docusaurus-plugin-content-pages']) === null || _h === void 0 ? void 0 : _h.default) !== null && _j !== void 0 ? _j : [];
+-    const docs = (_k = loadedVersion === null || loadedVersion === void 0 ? void 0 : loadedVersion.docs) !== null && _k !== void 0 ? _k : [];
++    var _a, _b, _c, _d, _e, _f, _g;
++    const loadedVersions = Object.values(allContent['docusaurus-plugin-content-docs']).flatMap(entry => entry === null || entry === void 0 ? void 0 : entry.loadedVersions);
++    const loadedVersion = loadedVersions.find((v) => v.versionName === version);
++    const blogs = (_d = (_c = (_b = (_a = allContent['docusaurus-plugin-content-blog']) === null || _a === void 0 ? void 0 : _a.default) === null || _b === void 0 ? void 0 : _b.blogPosts) === null || _c === void 0 ? void 0 : _c.map(({ metadata }) => metadata)) !== null && _d !== void 0 ? _d : [];
++    const pages = (_f = (_e = allContent['docusaurus-plugin-content-pages']) === null || _e === void 0 ? void 0 : _e.default) !== null && _f !== void 0 ? _f : [];
++    const docs = (_g = loadedVersion === null || loadedVersion === void 0 ? void 0 : loadedVersion.docs) !== null && _g !== void 0 ? _g : [];
+     const oramaDocs = [
+         ...(await Promise.all(blogs.map((data) => generateDocs(siteDir, data)))),
+         ...(await Promise.all(pages.map((data) => generateDocs(siteDir, data)))),
